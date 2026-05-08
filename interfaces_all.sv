@@ -15,19 +15,6 @@ interface system_if #(
   timeunit 1ns;
   timeprecision 100ps;
 
-  logic [ 7:0] i2c_data;
-  logic [15:0] i2c_divisor;
-  logic [ 2:0] i2c_ctr;
-  wire         i2c_scl;
-  wire         i2c_sda;
-  logic        i2c_hang_;
-  logic        i2c_ready;
-  logic        i2c_done;
-  logic        i2c_ack;
-  logic [ 7:0] i2c_data_out;
-  assign (pull1, highz0) i2c_scl = 1'b1;
-  assign (pull1, highz0) i2c_sda = 1'b1;
-
   logic gf_signal_in;
   logic gf_signal_out;
 
@@ -90,10 +77,6 @@ interface system_if #(
   clocking cb @(posedge sys_clk);
     default input #1ns output #5ns;
 
-    output i2c_data, i2c_divisor, i2c_ctr;
-    input  i2c_hang_, i2c_ready, i2c_done, i2c_ack, i2c_data_out;
-    inout  i2c_scl, i2c_sda;
-
     output gf_signal_in;
     input  gf_signal_out;
 
@@ -131,18 +114,6 @@ interface system_if #(
     input  led_ready, led_valid;
   endclocking : cb
 
-  modport i2c_mp (
-    input  sys_clk, rst_n,
-    input  i2c_data, i2c_divisor, i2c_ctr,
-    output i2c_hang_, i2c_ready, i2c_done, i2c_ack, i2c_data_out,
-    inout  i2c_scl, i2c_sda
-  );
-
-  modport i2c_drv_mp (
-    clocking cb,
-    input  sys_clk, rst_n,
-    output i2c_divisor
-  );
 
   modport gf_mp (
     input  sys_clk, rst_n,
